@@ -14,6 +14,8 @@ public:
     bool setParams();
     bool sendMessage(uint8_t* msg, uint16_t len);
     int available();
+    // TODO: change this to support reading one character a time. The caller can
+    // decide how they'd like to join sequences of messages.
     void readMessage(std::vector<uint8_t>& msg);
 
 private:
