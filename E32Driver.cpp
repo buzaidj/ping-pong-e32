@@ -19,6 +19,8 @@ void E32Driver::wakeUp() {
 }
 
 bool E32Driver::setParams() {
+    // The command outlined in section 7.5 of the E32-900T20D manual
+    // https://www.ebyte.com/en/pdf-down.aspx%3Fid%3D2520&ved=2ahUKEwid5s_43cqHAxVqFTQIHUgzBe0QFnoECBAQAQ&usg=AOvVaw1q1a_G1t4Mmccc89gPNgeX
     uint8_t HEAD = 0xC0;
     uint8_t ADDH = 0xFF;
     uint8_t ADDL = 0xFF;
@@ -26,6 +28,8 @@ bool E32Driver::setParams() {
     SPED |= 0b011 << 3;
     SPED |= 0b000;
     uint8_t CHAN = 0b000 << 5;
+    // On the E32-900T20D channels 0x00-0x45 correspond to 862 to 931MHz in 1 MhZ increments.
+    // Set to at least 0x28 to legally use this module in North America (40).
     CHAN |= 0x35;
     uint8_t OPTION = 0 << 7;
     OPTION |= 1 << 6;
