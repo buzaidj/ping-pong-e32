@@ -11,7 +11,9 @@ public:
 
     void putToSleep();
     void wakeUp();
+    // Must be asleep when calling set params. Returns true if successful.
     bool setParams();
+    // Returns false is the module is not available for sending a message.
     bool sendMessage(uint8_t* msg, uint16_t len);
     int available();
     // TODO: change this to support reading one character a time. The caller can

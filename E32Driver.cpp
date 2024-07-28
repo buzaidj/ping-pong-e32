@@ -60,9 +60,13 @@ void E32Driver::readMessage(std::vector<uint8_t>& msg) {
     // FIXME: before adding this delay, serial.available() was reporting 1
     // and each character was being read faster than the E32900T20D module could
     // produce them. Adding this delay helped, but it's not ideal.
+    while (!isReady()) {
+        delay(10);
+    }
     delay(10);
     while (serial.available()) {
-        msg.push_back(serial.read());
+        uint8_t byte_read;
+        msg.push_back(byte_read);
     }
 }
 
@@ -84,6 +88,7 @@ bool E32Driver::readConfig(std::array<uint8_t, 6>& expectedResult) {
         int curr_byte = serial.read();
 
         if (curr_byte == -1) {
+            Serial.println("bad byte");
             return false;
         }
 
@@ -94,6 +99,8 @@ bool E32Driver::readConfig(std::array<uint8_t, 6>& expectedResult) {
         if (bytesRead >= 6) {
             bool match = true;
             for (size_t i = 0; i < 6; ++i) {
+                Serial.println(lastSix[index + i] % 6);
+                Serial.println(expectedResult[index + i] % 6);
                 if (lastSix[(index + i) % 6] != expectedResult[i]) {
                     match = false;
                     break;
