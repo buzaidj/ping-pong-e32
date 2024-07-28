@@ -6,6 +6,26 @@
 #define IS_PING  1  // if 0, be pong i.e. respond to ping with pong, otherwise send ping
 #define BOARD    1  // if 1 my teensy board setup, if 0 my raspberry pi pico w board
 
+/** 
+ * LoraSerial: The serial class you'd like to use with your board. Check your 
+ * modules documentation for which class to use.
+ * 
+ * RX_PIN, TX_PIN: The pins associated with LoraSerial for receiving and transmitting data.
+ * 
+ * MO_PIN, M1_PIN: The pins on your microcontroller connected to the M0 and M1
+ * pins on the E32-900T20D. Used to put the module in and out of sleep mode.
+ * 
+ * AUX_PIN: The pin on your microcontroller connected to the AUX pin on the
+ * E32-900T20D module. Set to HIGH when the E32-900T20D module is ready to send a
+ * message. e32Driver.sendMessage will return false if AUX_PIN is low.
+ * 
+ * MSG_SEND_LED_PIN: Used in ping when a message is sent
+ * AWAKE_LED_PIN: Used in pong to make clear the module is operating
+ * MSG_RCV_LED_PIN: Used in both ping and pong to make it clear when the expected
+ * message has been received.
+ * SEND_INTERVAL_MS: How often ping should send messages
+ */
+
 #if IS_PING == 1 && BOARD == 1
     #define LoraSerial       Serial8
     #define RX_PIN           34
