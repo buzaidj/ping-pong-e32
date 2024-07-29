@@ -30,7 +30,7 @@ bool E32Driver::setParams() {
     uint8_t CHAN = 0b000 << 5;
     // On the E32-900T20D channels 0x00-0x45 correspond to 862 to 931MHz in 1 MhZ increments.
     // Set to at least 0x28 to legally use this module in North America (40).
-    CHAN |= 0x35;
+    CHAN |= 0x3A;
     uint8_t OPTION = 0 << 7;
     OPTION |= 1 << 6;
     OPTION |= 0b000 << 3;
@@ -48,10 +48,8 @@ bool E32Driver::setParams() {
 }
 
 bool E32Driver::sendMessage(uint8_t* msg, uint16_t len) {
-    if (!isReady()) {
-        return false;
-    }
-
+    // TODO: Fix isReady check. I don't think the AUX pin is working correctly on the rPI.
+    // if (!isReady()) return false;
     serial.write(msg, len);
     return true;
 }
@@ -64,18 +62,16 @@ void E32Driver::readMessage(std::vector<uint8_t>& msg) {
     // FIXME: before adding this delay, serial.available() was reporting 1
     // and each character was being read faster than the E32900T20D module could
     // produce them. Adding this delay helped, but it's not ideal.
-    while (!isReady()) {
-        delay(10);
-    }
     delay(10);
     while (serial.available()) {
-        uint8_t byte_read;
+        uint8_t byte_read = serial.read();
         msg.push_back(byte_read);
+        Serial.println(byte_read);
     }
 }
 
 bool E32Driver::readConfig(std::array<uint8_t, 6>& expectedResult) {
-    uint8_t commands[] = {0xC4, 0xC4, 0xC4};
+    uint8_t commands[] = {0xC1, 0xC1, 0xC1};
     serial.write(commands, sizeof(commands));
 
     delay(50);
